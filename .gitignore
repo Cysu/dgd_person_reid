@@ -1,0 +1,59 @@
+## General
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.cuo
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+
+# Compiled protocol buffers
+*.pb.h
+*.pb.cc
+*_pb2.py
+
+# Compiled python
+*.pyc
+
+# Compiled MATLAB
+*.mex*
+
+# IPython notebook checkpoints
+.ipynb_checkpoints
+
+# CMake generated files
+*.gen.cmake
+
+# Editor temporaries
+*.swp
+*~
+
+# Sublime Text settings
+*.sublime-workspace
+*.sublime-project
+
+# Eclipse Project settings
+*.*project
+.settings
+
+# OSX dir files
+.DS_Store
+
+
+## Project specific
+*.log
+*.png
+*.jpg
+*.mat
+*.tgz
+*.zip
+*.tar.gz
+external/
