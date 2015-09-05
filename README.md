@@ -22,6 +22,22 @@ The last is our [brewed caffe](https://github.com/Cysu/caffe/tree/mydev).
     cd /path/to/caffe && git checkout mydev && cd -
     ln -sf /path/to/caffe external/caffe
 
+## Prepare data
+
+First we need to format raw datasets into our uniform data format.
+
+    scripts/format_rawdata.sh
+
+Next convert the formatted datasets into serialized databases.
+
+    scripts/make_dbs.sh
+
+## Train net
+
+Some model and solver definitions are provided in `models/`. Use `scripts/train_net.sh dataset_name model_name` to train a model on a dataset, for example,
+
+    scripts/train_net.sh cuhk03 vggnet_bn
+
 ## Datasets
 
 We summarize some commonly used person re-id datasets below. They can be downlaoded at [here](http://pan.baidu.com/s/1kTy9dUv) with password 8hjx.
