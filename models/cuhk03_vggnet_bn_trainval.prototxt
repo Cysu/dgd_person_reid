@@ -4,15 +4,15 @@ name: "CUHK03_VGGNet_BN"
 ##################################### data #####################################
 layer { name: "data" type: "Data" top: "data" top: "label"
   data_param { backend: LMDB batch_size: 128
-    source: "external/exp/db/cuhk03_split_00/train_lmdb" }
+    source: "external/exp/db/cuhk03_split_${SPLIT_INDEX}/train_lmdb" }
   transform_param { mirror: true crop_height: 144 crop_width: 56
-    mean_file: "external/exp/db/cuhk03_split_00/mean.binaryproto" }
+    mean_file: "external/exp/db/cuhk03_split_${SPLIT_INDEX}/mean.binaryproto" }
   include: { phase: TRAIN } }
 layer { name: "data" type: "Data" top: "data" top: "label"
   data_param { backend: LMDB batch_size: 100
-    source: "external/exp/db/cuhk03_split_00/val_lmdb" }
+    source: "external/exp/db/cuhk03_split_${SPLIT_INDEX}/val_lmdb" }
   transform_param { mirror: false crop_height: 144 crop_width: 56
-    mean_file: "external/exp/db/cuhk03_split_00/mean.binaryproto" }
+    mean_file: "external/exp/db/cuhk03_split_${SPLIT_INDEX}/mean.binaryproto" }
   include: { phase: TEST } }
 
 
