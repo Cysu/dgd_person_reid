@@ -47,23 +47,24 @@ def main(args):
         num_val = int(len(trainval) * args.val_ratio)
         train = trainval[num_val:]
         val = trainval[:num_val]
-    # Make test query / probe. Query identities should be a subset of probe's.
-    # First half views are query, others are probe.
-    assert len(set(split['test_query']) - set(split['test_probe'])) == 0
-    test_query, test_probe = [], []
-    for views in identities[split['test_query']]:
-        test_query.append(views[:len(views) // 2])
-        test_probe.append(views[len(views) // 2:])
-    only_in_probe = list(set(split['test_probe']) - set(split['test_query']))
-    test_probe.extend(identities[only_in_probe])
-    test_query = _get_list(test_query)
+    # Make test probe / gallery. Probe identities should be a subset of
+    # gallery's. First half views are probe, others are gallery.
+    assert len(set(split['test_probe']) - set(split['test_gallery'])) == 0
+    test_probe, test_gallery = [], []
+    for views in identities[split['test_probe']]:
+        test_probe.append(views[:len(views) // 2])
+        test_gallery.append(views[len(views) // 2:])
+    only_in_gallery = list(
+            set(split['test_gallery']) - set(split['test_probe']))
+    test_gallery.extend(identities[only_in_gallery])
     test_probe = _get_list(test_probe)
+    test_gallery = _get_list(test_gallery)
     # Save to files
     mkdir_if_missing(args.output_dir)
     _save(train, osp.join(args.output_dir, 'train.txt'))
     _save(val, osp.join(args.output_dir, 'val.txt'))
-    _save(test_query, osp.join(args.output_dir, 'test_query.txt'))
     _save(test_probe, osp.join(args.output_dir, 'test_probe.txt'))
+    _save(test_gallery, osp.join(args.output_dir, 'test_gallery.txt'))
 
 
 if __name__ == '__main__':

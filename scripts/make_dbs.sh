@@ -17,7 +17,7 @@ make_db () {
       RESIZE_WIDTH=64
   fi
 
-  for subset in train val test_query test_probe; do
+  for subset in train val test_probe test_gallery; do
     echo "Making ${subset} set"
     $CAFFE/build/tools/convert_imageset \
         ${ROOT_DIR}/ ${DB_DIR}/${subset}.txt ${DB_DIR}/${subset}_lmdb \

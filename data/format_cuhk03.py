@@ -75,8 +75,8 @@ def main(args):
         test_pids.sort()
         trainval_pids = list(set(xrange(vid_offsets[-1])) - set(test_pids))
         split = {'trainval': trainval_pids,
-                 'test_query': test_pids,
-                 'test_probe': test_pids}
+                 'test_probe': test_pids,
+                 'test_gallery': test_pids}
         file_name = osp.join(output_dir, 'split_{:02d}.json'.format(split_id))
         write_json(split, file_name)
 
