@@ -20,6 +20,11 @@ The last is our [brewed caffe](https://github.com/Cysu/caffe/tree/mydev).
 
     git clone https://github.com/Cysu/caffe.git /path/to/caffe
     cd /path/to/caffe && git checkout mydev && cd -
+
+    # Compile the caffe properly.
+    # Please refer to the caffe's repository for detailed instructions.
+
+    # After compilation, link it to our project.
     ln -sf /path/to/caffe external/caffe
 
 ## Prepare data
@@ -34,9 +39,25 @@ Next convert the formatted datasets into serialized databases.
 
 ## Train net
 
-Some model and solver definitions are provided in `models/`. Use `scripts/train_net.sh dataset_name model_name` to train a model on a dataset, for example,
+Some model and solver definitions are provided in `models/`. Use `scripts/train_net.sh dataset_name split_index model_name` to train a model on a dataset, for example,
 
-    scripts/train_net.sh cuhk03 vggnet_bn
+    scripts/train_net.sh cuhk03 0 vggnet_bn
+
+## Extract features
+
+After training a CNN, use `scripts/extract_features.sh dataset_split_name model_name caffemodel_path [blob_name]` to extract features, for example,
+
+    scripts/extract_features.sh cuhk03_split_00 vggnet_bn \
+        external/exp/models/cuhk03_split_00_vggnet_bn_iter_120000.caffemodel
+
+## Evaluate by CMC
+
+Use the extracted features to learn a metric and then evaluate by CMC score, for example,
+
+    python2 eval/metric_learning.py \
+        external/exp/results/cuhk03_split_00_vggnet_bn_fc7_cuhk03_vggnet_bn_iter_120000
+
+This will print several top-k accuracies, and you may find the top-1 accuracy to be around 68%.
 
 ## Datasets
 
