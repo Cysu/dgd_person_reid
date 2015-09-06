@@ -31,6 +31,9 @@ make_db () {
 
 
 # cuhk03
-python2 tools/make_lists_id_training.py \
-    $EXP/datasets/cuhk03/ $EXP/db/cuhk03_split_00 --split-index 0
-make_db $EXP/datasets/cuhk03 $EXP/db/cuhk03_split_00
+for i in {00..04}; do
+  echo "Making cuhk03 split $i"
+  python2 tools/make_lists_id_training.py \
+      $EXP/datasets/cuhk03/ $EXP/db/cuhk03_split_$i --split-index $i
+  make_db $EXP/datasets/cuhk03 $EXP/db/cuhk03_split_$i
+done
