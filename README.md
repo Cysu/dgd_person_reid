@@ -41,7 +41,7 @@ Next convert the formatted datasets into serialized databases.
 
 Some model and solver definitions are provided in `models/`. Use `scripts/train_net.sh dataset_name split_index model_name` to train a model on a dataset, for example,
 
-    scripts/train_net.sh cuhk03 0 vggnet_bn
+    mkdir external/exp/models && scripts/train_net.sh cuhk03 0 vggnet_bn
 
 ## Extract features
 
