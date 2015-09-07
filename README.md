@@ -48,16 +48,17 @@ Some model and solver definitions are provided in `models/`. Use `scripts/train_
 After training a CNN, use `scripts/extract_features.sh dataset_split_name model_name caffemodel_path [blob_name]` to extract features, for example,
 
     scripts/extract_features.sh cuhk03_split_00 vggnet_bn \
-        external/exp/models/cuhk03_split_00_vggnet_bn_iter_120000.caffemodel
+        external/exp/models/cuhk03_split_00_vggnet_bn_iter_120000.caffemodel \
+        fc7_bn
 
 ## Evaluate by CMC
 
 Use the extracted features to learn a metric and then evaluate by CMC score, for example,
 
     python2 eval/metric_learning.py \
-        external/exp/results/cuhk03_split_00_vggnet_bn_fc7_cuhk03_vggnet_bn_iter_120000
+        external/exp/results/cuhk03_split_00_vggnet_bn_fc7_bn_cuhk03_vggnet_bn_iter_120000
 
-This will print several top-k accuracies, and you may find the top-1 accuracy to be around 68%.
+This will print several top-k accuracies, and you may find the top-1 accuracy to be around 71%.
 
 ## Datasets
 
