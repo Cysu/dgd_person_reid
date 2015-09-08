@@ -28,6 +28,7 @@ WEIGHTS_NAME=$(basename $WEIGHTS)
 WEIGHTS_NAME="${WEIGHTS_NAME%%.*}"
 OUTPUT=${EXP}/results/${DATASET}_${MODEL}_${BLOB}_${WEIGHTS_NAME}
 
+rm -rf ${OUTPUT}
 mkdir -p ${OUTPUT}
 for token in train val test_probe test_gallery; do
   echo "Extracting ${token} set"
