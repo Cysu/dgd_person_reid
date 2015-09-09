@@ -38,10 +38,8 @@ for token in train val test_probe test_gallery; do
   sed -e "s/\${DATASET}/${DATASET}/g; s/\${TOKEN}/${token}/g" \
       ${TEMPLATE} > ${tmp_model}
   ${CAFFE}/build/tools/extract_features \
-      ${WEIGHTS} ${tmp_model} ${BLOB} ${OUTPUT}/${token}_features_lmdb \
-      ${num_iters} lmdb GPU 0
-  ${CAFFE}/build/tools/extract_features \
-      ${WEIGHTS} ${tmp_model} label ${OUTPUT}/${token}_labels_lmdb \
+      ${WEIGHTS} ${tmp_model} ${BLOB},label \
+      ${OUTPUT}/${token}_features_lmdb,${OUTPUT}/${token}_labels_lmdb \
       ${num_iters} lmdb GPU 0
   python2 tools/convert_lmdb_to_numpy.py \
       ${OUTPUT}/${token}_features_lmdb ${OUTPUT}/${token}_features.npy \
