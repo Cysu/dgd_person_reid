@@ -32,7 +32,7 @@ def main(args):
         # split their views equally for training and validation.
         num_val = int(len(trainval) * args.val_ratio) * 2
         np.random.shuffle(trainval)
-        train = trainval[num_val:]
+        train = list(trainval[num_val:])
         val = []
         for views in trainval[:num_val]:
             np.random.shuffle(views)
