@@ -37,3 +37,11 @@ for i in {00..04}; do
       $EXP/datasets/cuhk03/ $EXP/db/cuhk03_split_$i --split-index $i
   make_db $EXP/datasets/cuhk03 $EXP/db/cuhk03_split_$i
 done
+
+# viper
+for i in {00..09}; do
+  echo "Making viper split $i"
+  python2 tools/make_lists_id_training.py \
+      $EXP/datasets/viper/ $EXP/db/viper_split_$i --split-index $i
+  make_db $EXP/datasets/viper $EXP/db/viper_split_$i
+done
