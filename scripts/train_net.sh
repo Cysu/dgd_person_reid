@@ -29,6 +29,6 @@ sed -e "s/\${SPLIT_INDEX}/${SPLIT_INDEX}/g" \
 
 GLOG_logtostderr=1 mpirun -n 2 $CAFFE/build/tools/caffe train \
     -solver ${SOLVER} -gpu 0,1 \
-    2>&1 | tee models/${DATASET}_split_${SPLIT_INDEX}_${MODEL}.log
+    2>&1 | tee logs/${DATASET}_split_${SPLIT_INDEX}_${MODEL}.log
 
 rm ${TRAINVAL} ${SOLVER}
