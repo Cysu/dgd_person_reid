@@ -61,3 +61,11 @@ for i in {00..09}; do
       $EXP/datasets/3dpes/ $EXP/db/3dpes_split_$i --split-index $i
   make_db $EXP/datasets/3dpes $EXP/db/3dpes_split_$i
 done
+
+# ilids
+for i in {00..09}; do
+  echo "Making ilids split $i"
+  python2 tools/make_lists_id_training.py \
+      $EXP/datasets/ilids/ $EXP/db/ilids_split_$i --split-index $i
+  make_db $EXP/datasets/ilids $EXP/db/ilids_split_$i
+done

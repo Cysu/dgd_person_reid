@@ -18,7 +18,7 @@ def main(args):
     for imname in images:
         pid, vid = osp.basename(imname).split('_')[0:2]
         pdict[pid][vid].append(imname)
-    # Randomly choose half of the views as cam_a, others as cam_b
+    # Randomly choose half of the views as cam_0, others as cam_1
     identities = []
     for i, pid in enumerate(pdict):
         vids = pdict[pid].keys()
