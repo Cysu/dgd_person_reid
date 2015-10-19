@@ -9,3 +9,5 @@ echo "Formatting CUHK03 ..."
 python2 data/format_cuhk03.py $RAW/cuhk03 $EXP/datasets/cuhk03
 echo "Formatting VIPeR ..."
 python2 data/format_viper.py $RAW/VIPeR $EXP/datasets/viper
+echo "Formatting CUHK01 ..."
+python2 data/format_cuhk01.py $RAW/cuhk01 $EXP/datasets/cuhk01
