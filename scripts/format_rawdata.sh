@@ -15,3 +15,5 @@ echo "Formatting 3DPeS ..."
 python2 data/format_3dpes.py $RAW/3DPeS $EXP/datasets/3dpes
 echo "Formatting i-LIDS ..."
 python2 data/format_ilids.py $RAW/i-LIDS $EXP/datasets/ilids
+echo "Formatting PRID ..."
+python2 data/format_prid.py $RAW/PRID $EXP/datasets/prid

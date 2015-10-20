@@ -69,3 +69,11 @@ for i in {00..09}; do
       $EXP/datasets/ilids/ $EXP/db/ilids_split_$i --split-index $i
   make_db $EXP/datasets/ilids $EXP/db/ilids_split_$i
 done
+
+# prid
+for i in {00..00}; do
+  echo "Making prid split $i"
+  python2 tools/make_lists_id_training.py \
+      $EXP/datasets/prid/ $EXP/db/prid_split_$i --split-index $i
+  make_db $EXP/datasets/prid $EXP/db/prid_split_$i
+done
