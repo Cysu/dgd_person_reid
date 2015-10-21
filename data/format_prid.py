@@ -30,16 +30,23 @@ def main(args):
         p_images.append([tgt_file])
         identities.append(p_images)
     # Other 100 people from the 200 as a part of trainval
+    # Choose 10 images randomly from the multi-shot images
     trainval = range(100, 200)
     for pid in p[100:]:
         p_images = [[], []]
         images = glob(osp.join(args.prid_dir, 'multi_shot', 'cam_a',
                                'person_{:04d}'.format(pid + 1), '*.png'))
+        images = np.random.choice(images, size=min(10, len(images)),
+                                  replace=False)
         for src_file in images:
             tgt_file = osp.join('cam_0',
                     '{:05d}_{:05d}.png'.format(len(identities), len(p_images[0])))
             shutil.copy(src_file, osp.join(args.output_dir, tgt_file))
             p_images[0].append(tgt_file)
+        images = glob(osp.join(args.prid_dir, 'multi_shot', 'cam_b',
+                               'person_{:04d}'.format(pid + 1), '*.png'))
+        images = np.random.choice(images, size=min(10, len(images)),
+                                  replace=False)
         for src_file in images:
             tgt_file = osp.join('cam_1',
                     '{:05d}_{:05d}.png'.format(len(identities), len(p_images[1])))
@@ -51,6 +58,8 @@ def main(args):
         p_images = [[], []]
         images = glob(osp.join(args.prid_dir, 'multi_shot', 'cam_a',
                                'person_{:04d}'.format(pid + 1), '*.png'))
+        images = np.random.choice(images, size=min(10, len(images)),
+                                  replace=False)
         for src_file in images:
             tgt_file = osp.join('cam_0',
                     '{:05d}_{:05d}.png'.format(len(identities), len(p_images[0])))
