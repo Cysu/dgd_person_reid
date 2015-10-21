@@ -8,7 +8,7 @@ layer { name: "data" type: "Data" top: "data" top: "label"
     mean_file: "external/exp/db/cuhk03_split_${SPLIT_INDEX}/mean.binaryproto" }
   include: { phase: TRAIN } }
 layer { name: "data" type: "Data" top: "data" top: "label"
-  data_param { backend: LMDB batch_size: 20
+  data_param { backend: LMDB batch_size: 10
     source: "external/exp/db/cuhk03_split_${SPLIT_INDEX}/val_lmdb" }
   transform_param { mirror: false crop_height: 144 crop_width: 56
     mean_file: "external/exp/db/cuhk03_split_${SPLIT_INDEX}/mean.binaryproto" }
