@@ -11,8 +11,10 @@ cd $(dirname ${BASH_SOURCE[0]})/../
 python2 tools/merge_lists_single_task.py \
     --dataset-dirs $DATASETS/3dpes $DATASETS/cuhk01 $DATASETS/cuhk03 \
                    $DATASETS/ilids $DATASETS/prid $DATASETS/viper \
+                   $DATASETS/shinpuhkan \
     --db-dirs $DB/3dpes_split_00 $DB/cuhk01_split_00 $DB/cuhk03_split_00 \
               $DB/ilids_split_00 $DB/prid_split_00 $DB/viper_split_00 \
+              $DB/shinpuhkan_split_00 \
     -- $DB/merged_single_task_split_00
 
 DB=$DB/merged_single_task_split_00

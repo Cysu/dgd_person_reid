@@ -77,3 +77,24 @@ for i in {00..00}; do
       $EXP/datasets/prid/ $EXP/db/prid_split_$i --split-index $i
   make_db $EXP/datasets/prid $EXP/db/prid_split_$i
 done
+
+# shinpuhkan
+echo "Making shinpuhkan split 0"
+python2 tools/make_lists_id_training.py \
+    $EXP/datasets/shinpuhkan $EXP/db/shinpuhkan_split_00 --split-index 00
+rm $EXP/db/shinpuhkan_split_00/test_gallery.txt
+rm $EXP/db/shinpuhkan_split_00/test_probe.txt
+echo "Making train set"
+$CAFFE/build/tools/convert_imageset \
+    $EXP/datasets/shinpuhkan/ $EXP/db/shinpuhkan_split_00/train.txt \
+    $EXP/db/shinpuhkan_split_00/train_lmdb \
+    -resize_height 160 -resize_width 64
+echo "Making val set"
+$CAFFE/build/tools/convert_imageset \
+    $EXP/datasets/shinpuhkan/ $EXP/db/shinpuhkan_split_00/val.txt \
+    $EXP/db/shinpuhkan_split_00/val_lmdb \
+    -resize_height 160 -resize_width 64
+echo "Computing images mean"
+$CAFFE/build/tools/compute_image_mean \
+    $EXP/db/shinpuhkan_split_00/train_lmdb \
+    $EXP/db/shinpuhkan_split_00/mean.binaryproto

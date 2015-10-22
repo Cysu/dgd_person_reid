@@ -17,3 +17,5 @@ echo "Formatting i-LIDS ..."
 python2 data/format_ilids.py $RAW/i-LIDS $EXP/datasets/ilids
 echo "Formatting PRID ..."
 python2 data/format_prid.py $RAW/PRID $EXP/datasets/prid
+echo "Formatting Shinpuhkan ..."
+python2 data/format_shinpuhkan.py $RAW/Shinpuhkan2014dataset $EXP/datasets/shinpuhkan
