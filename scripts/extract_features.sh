@@ -33,6 +33,7 @@ mkdir -p ${OUTPUT}
 for token in train val test_probe test_gallery; do
   echo "Extracting ${token} set"
   num_samples=$(wc -l ${EXP}/db/${DATASET}/${token}.txt | awk '{print $1}')
+  num_samples=$((num_samples + 1))
   num_iters=$((num_samples / 100 + 1))
   tmp_model=$(mktemp)
   sed -e "s/\${DATASET}/${DATASET}/g; s/\${TOKEN}/${token}/g" \
