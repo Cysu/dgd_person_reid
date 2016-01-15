@@ -33,22 +33,26 @@ First we need to format raw datasets into our uniform data format.
 
     scripts/format_rawdata.sh
 
-Next convert the formatted datasets into serialized databases.
+Next convert each formatted dataset into a LMDB.
 
     scripts/make_dbs.sh
 
+At last merge all the datasets together in a single-task manner.
+
+    scripts/merge_dbs_single_task.sh
+
 ## Train net
 
-Some model and solver definitions are provided in `models/`. Use `scripts/train_net.sh dataset_name split_index model_name` to train a model on a dataset, for example,
+Some model and solver definitions are provided in `models/`. Use `scripts/train_net.sh dataset_name split_index model_name` to train a model on a dataset, for example, the Joint Single-Task Learning (JSTL) is done by
 
-    mkdir external/exp/models && scripts/train_net.sh cuhk03 0 vggnet_bn
+    mkdir external/exp/models && scripts/train_net.sh jstl 0 googlenet_bn
 
 ## Extract features
 
 After training a CNN, use `scripts/extract_features.sh dataset_split_name model_name caffemodel_path [blob_name]` to extract features, for example,
 
-    scripts/extract_features.sh cuhk03_split_00 vggnet_bn \
-        external/exp/models/cuhk03_split_00_vggnet_bn_iter_120000.caffemodel \
+    scripts/extract_features.sh cuhk03_split_00 googlenet_bn \
+        external/exp/models/jstl_split_00_googlenet_bn_iter_55000.caffemodel \
         fc7_bn
 
 ## Evaluate by CMC
@@ -56,13 +60,13 @@ After training a CNN, use `scripts/extract_features.sh dataset_split_name model_
 Use the extracted features to learn a metric and then evaluate by CMC score, for example,
 
     python2 eval/metric_learning.py \
-        external/exp/results/cuhk03_split_00_vggnet_bn_fc7_bn_cuhk03_vggnet_bn_iter_120000
+        external/exp/results/cuhk03_split_00_googlenet_bn_fc7_bn_jstl_split_00_googlenet_bn_iter_55000
 
-This will print several top-k accuracies, and you may find the top-1 accuracy to be around 71%.
+This will print several top-k accuracies, and you may find the top-1 accuracy to be around 73%.
 
 ## Datasets
 
-We summarize some commonly used person re-id datasets below. They can be downlaoded at [here](http://pan.baidu.com/s/1kTy9dUv) with password 8hjx.
+We summarize some commonly used person re-id datasets below. They can be downlaoded from [here](http://pan.baidu.com/s/1kTy9dUv) with password 8hjx.
 
 <table>
   <tr>

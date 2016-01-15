@@ -20,7 +20,7 @@ WEIGHTS=$3
 if [[ $# -eq 4 ]]; then
   BLOB=$4
 else
-  BLOB=fc7
+  BLOB=fc7_bn
 fi
 
 TEMPLATE=models/exfeat_template_${MODEL}.prototxt
