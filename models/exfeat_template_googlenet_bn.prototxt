@@ -3,7 +3,7 @@ name: "Extract_Features_Template_GoogLeNet_BN"
 ##################################### data #####################################
 layer { name: "data" type: "Data" top: "data" top: "label"
   data_param { backend: LMDB batch_size: 100
-    source: "external/exp/db/${DATASET}/${TOKEN}_lmdb" }
+    source: "external/exp/db/${dbname}/${subset}_lmdb" }
   transform_param { mirror: false crop_height: 144 crop_width: 56
     mean_value: 102 mean_value: 102 mean_value: 101 } }
 

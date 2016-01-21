@@ -1,51 +1,58 @@
 #!/usr/bin/env bash
 # Extract features. The batch size is assumed to be 100.
+# Use GPU 0 by default.
 
-RAW=external/raw
-EXP=external/exp
-CAFFE=external/caffe
+# Change to the project root directory. Assume this file is at scripts/.
+cd $(dirname ${BASH_SOURCE[0]})/../
 
+# Set relative paths.
+CAFFE_DIR=external/caffe
+DB_DIR=external/exp/db
+RESULTS_DIR=external/exp/results
+
+# Parse arguments.
 if [[ $# -ne 3 ]] && [[ $# -ne 4 ]]; then
-  echo "Usage: $(basename $0) dataset model weights [blob=fc7]"
-  echo "    dataset         Dataset name where features are extracted"
+  echo "Usage: $(basename $0) db model weights [blob=fc7_bn]"
+  echo "    dbname          Database name where features are extracted"
   echo "    model           Model name"
   echo "    weights         Pretrained caffe model weights"
   echo "    blob            Name of the blob to be extracted. Default fc7"
   exit
 fi
-
-DATASET=$1
-MODEL=$2
-WEIGHTS=$3
+dbname=$1
+model=$2
+weights=$3
 if [[ $# -eq 4 ]]; then
-  BLOB=$4
+  blob=$4
 else
-  BLOB=fc7_bn
+  blob=fc7_bn
 fi
 
-TEMPLATE=models/exfeat_template_${MODEL}.prototxt
-WEIGHTS_NAME=$(basename $WEIGHTS)
-WEIGHTS_NAME="${WEIGHTS_NAME%%.*}"
-OUTPUT=${EXP}/results/${DATASET}_${MODEL}_${BLOB}_${WEIGHTS_NAME}
+# Get file names for prototxt, caffemodel, and output directory.
+model_template=models/exfeat_template_${model}.prototxt
+weights_name=$(basename $weights)
+weights_name="${weights_name%%.*}"
+output_dir=${RESULTS_DIR}/${dbname}_${model}_${blob}_${weights_name}
 
-rm -rf ${OUTPUT}
-mkdir -p ${OUTPUT}
-for token in train val test_probe test_gallery; do
-  echo "Extracting ${token} set"
-  num_samples=$(wc -l ${EXP}/db/${DATASET}/${token}.txt | awk '{print $1}')
+# Extract train, val, test probe, and test gallery features.
+rm -rf ${output_dir}
+mkdir -p ${output_dir}
+for subset in train val test_probe test_gallery; do
+  echo "Extracting ${subset} set"
+  num_samples=$(wc -l ${DB_DIR}/${dbname}/${subset}.txt | awk '{print $1}')
   num_samples=$((num_samples + 1))
   num_iters=$((num_samples / 100 + 1))
-  tmp_model=$(mktemp)
-  sed -e "s/\${DATASET}/${DATASET}/g; s/\${TOKEN}/${token}/g" \
-      ${TEMPLATE} > ${tmp_model}
-  ${CAFFE}/build/tools/extract_features \
-      ${WEIGHTS} ${tmp_model} ${BLOB},label \
-      ${OUTPUT}/${token}_features_lmdb,${OUTPUT}/${token}_labels_lmdb \
+  model=$(mktemp)
+  sed -e "s/\${dbname}/${dbname}/g; s/\${subset}/${subset}/g" \
+      ${model_template} > ${model}
+  ${CAFFE_DIR}/build/tools/extract_features \
+      ${weights} ${model} ${blob},label \
+      ${output_dir}/${subset}_features_lmdb,${output_dir}/${subset}_labels_lmdb \
       ${num_iters} lmdb GPU 0
   python2 tools/convert_lmdb_to_numpy.py \
-      ${OUTPUT}/${token}_features_lmdb ${OUTPUT}/${token}_features.npy \
+      ${output_dir}/${subset}_features_lmdb ${output_dir}/${subset}_features.npy \
       --truncate ${num_samples}
   python2 tools/convert_lmdb_to_numpy.py \
-      ${OUTPUT}/${token}_labels_lmdb ${OUTPUT}/${token}_labels.npy \
+      ${output_dir}/${subset}_labels_lmdb ${output_dir}/${subset}_labels.npy \
       --truncate ${num_samples}
 done
