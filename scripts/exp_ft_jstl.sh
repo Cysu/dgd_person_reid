@@ -30,17 +30,17 @@ mkdir -p ${SNAPSHOTS_DIR}
 
 # Replace the split_index with our specified one in the template solver and
 # template trainval prototxt.
-TRAINVAL=${MODELS_DIR}/${dataset}_split_${split_index}_${model}_trainval.prototxt
-SOLVER=${MODELS_DIR}/${dataset}_split_${split_index}_${model}_solver.prototxt
+trainval=${MODELS_DIR}/${dataset}_split_${split_index}_${model}_trainval.prototxt
+solver=${MODELS_DIR}/${dataset}_split_${split_index}_${model}_solver.prototxt
 sed -e "s/\${split_index}/${split_index}/g" \
-    ${MODELS_DIR}/${dataset}_${model}_trainval.prototxt > ${TRAINVAL}
+    ${MODELS_DIR}/${dataset}_${model}_trainval.prototxt > ${trainval}
 sed -e "s/\${split_index}/${split_index}/g" \
-    ${MODELS_DIR}/${dataset}_${model}_solver.prototxt > ${SOLVER}
+    ${MODELS_DIR}/${dataset}_${model}_solver.prototxt > ${solver}
 
 # Fine-tuning.
 GLOG_logtostderr=1 mpirun -n 2 ${CAFFE_DIR}/build/tools/caffe train \
-    -solver ${SOLVER} -weights ${weights} -gpu 0,1 \
+    -solver ${solver} -weights ${weights} -gpu 0,1 \
     2>&1 | tee ${LOGS_DIR}/${dataset}_split_${split_index}_${model}.log
 
 # Cleanup.
-rm ${TRAINVAL} ${SOLVER}
+rm ${trainval} ${solver}
