@@ -1,16 +1,16 @@
-name: "Joint_Single_Task_Learning_GoogLeNet_BN"
+name: "JSTL_GoogLeNet_BN"
 richness: 1000
 
 ##################################### data #####################################
 layer { name: "data" type: "Data" top: "data" top: "label"
   data_param { backend: LMDB batch_size: 100 shuffle_pool_size: 10
-    source: "external/exp/db/merged_single_task_split_${SPLIT_INDEX}/train_lmdb" }
+    source: "external/exp/db/jstl_split_${split_index}/train_lmdb" }
   transform_param { mirror: true crop_height: 144 crop_width: 56
     mean_value: 102 mean_value: 102 mean_value: 101 }
   include: { phase: TRAIN } }
 layer { name: "data" type: "Data" top: "data" top: "label"
   data_param { backend: LMDB batch_size: 20
-    source: "external/exp/db/merged_single_task_split_${SPLIT_INDEX}/val_lmdb" }
+    source: "external/exp/db/jstl_split_${split_index}/val_lmdb" }
   transform_param { mirror: false crop_height: 144 crop_width: 56
     mean_value: 102 mean_value: 102 mean_value: 101 }
   include: { phase: TEST } }
