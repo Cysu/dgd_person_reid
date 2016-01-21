@@ -16,7 +16,7 @@ if [[ $# -ne 3 ]] && [[ $# -ne 4 ]]; then
   echo "    dbname          Database name where features are extracted"
   echo "    model           Model name"
   echo "    weights         Pretrained caffe model weights"
-  echo "    blob            Name of the blob to be extracted. Default fc7"
+  echo "    blob            Name of the blob to be extracted. Default fc7_bn."
   exit
 fi
 dbname=$1
