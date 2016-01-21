@@ -15,9 +15,9 @@ python2 tools/merge_lists_single_task.py \
     --db-dirs $DB/3dpes_split_00 $DB/cuhk01_split_00 $DB/cuhk03_split_00 \
               $DB/ilids_split_00 $DB/prid_split_00 $DB/viper_split_00 \
               $DB/shinpuhkan_split_00 \
-    -- $DB/merged_single_task_split_00
+    -- $DB/jstl_split_00
 
-DB=$DB/merged_single_task_split_00
+DB=$DB/jstl_split_00
 echo "Making training set"
 $CAFFE/build/tools/convert_imageset \
     $(pwd)/ $DB/train.txt $DB/train_lmdb \
