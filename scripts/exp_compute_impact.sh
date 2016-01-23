@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # Compute the neurons impact score for each dataset.
+# The batch size is assumed to be 20.
 
 # Change to the project root directory. Assume this file is at scripts/.
 cd $(dirname ${BASH_SOURCE[0]})/../
@@ -8,15 +9,15 @@ cd $(dirname ${BASH_SOURCE[0]})/../
 MODELS_DIR=models/fc_only
 DB_DIR=external/exp/db
 SNAPSHOTS_DIR=external/exp/snapshots/fc_only
-RESULTS_DIR=external/exp/results/impact
 
 # Parse arguments.
-if [[ $# -ne 4 ]] && [[ $# -ne 5 ]]; then
-    echo "Usage: $(basename $0) dataset split model weights [layer=fc7]"
+if [[ $# -ne 5 ]] && [[ $# -ne 6 ]]; then
+    echo "Usage: $(basename $0) dataset split model weights output_dir [layer=fc7]"
     echo "    dataset       Dataset name"
     echo "    split         Split index"
     echo "    model         Model name"
     echo "    weights       Pretrained caffe model weights"
+    echo "    output_dir    Output directory"
     echo "    layer         Name of the layer. Default fc7."
     exit
 fi
@@ -24,14 +25,15 @@ dataset=$1
 printf -v split_index "%02d" $2
 model=$3
 weights=$4
-if [[ $# -eq 5 ]]; then
-  layer=$5
+output_dir=$5
+if [[ $# -eq 6 ]]; then
+  layer=$6
 else
   layer=fc7
 fi
 
 # Make directories.
-mkdir -p ${RESULTS_DIR}
+mkdir -p ${output_dir}
 
 # Replace the split_index with our specified one in the template solver and
 # template trainval prototxt.
@@ -48,7 +50,7 @@ num_iters=$((num_samples / 20 + 1))
 # Get the output name.
 weights_name=$(basename $weights)
 weights_name="${weights_name%%.*}"
-output_npy=${RESULTS_DIR}/${dataset}_split_${split_index}_${model}_${layer}_${weights_name}.npy
+output_npy=${output_dir}/${dataset}.npy
 
 # Compute.
 python2 tools/compute_impact_score.py ${trainval} ${weights} ${output_npy} \

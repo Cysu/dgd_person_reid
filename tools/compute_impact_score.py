@@ -55,7 +55,7 @@ def main(args):
         batch_size = net.blobs[blob].shape[0]
         impact /= (batch_size * args.num_iters)
     # Save
-    pickle(impact, args.output)
+    np.save(args.output, impact)
 
 
 if __name__ == '__main__':
