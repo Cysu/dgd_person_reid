@@ -1,0 +1,18 @@
+net: "models/leave_viper/ft_jstl_dgd_split_${split_index}_googlenet_bn_trainval.prototxt"
+test_iter: 7
+test_interval: 50
+test_initialization: true
+
+display: 20
+average_loss: 20
+
+base_lr: 0.01
+lr_policy: "poly"
+power: 0.5
+max_iter: 500
+
+momentum: 0.9
+weight_decay: 0.0005
+
+snapshot_prefix: "external/exp/snapshots/leave_viper/ft_jstl_dgd_split_${split_index}_googlenet_bn"
+solver_mode: GPU
