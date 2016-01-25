@@ -18,7 +18,8 @@ impact_dir=$2
 prefix=$(basename ${impact_dir})
 
 # Save individual
-for ds in cuhk03 cuhk01 prid viper 3dpes ilids shinpuhkan; do
+for ds in $(ls ${impact_dir}); do
+  ds=$(basename ${ds} .npy)
   python2 tools/save_individual_impact_score.py \
       ${impact_dir}/${ds}.npy \
       ${DB_DIR}/${ds}_split_${split_index}/${prefix}_lmdb
