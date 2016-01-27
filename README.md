@@ -1,31 +1,32 @@
 # Person Re-identification
 
-The person re-identification project.
+This is a person re-identification (re-id) project that aims at learning generic deep features from multiple person re-id datasets.
 
 ## Installation
 
-Basically, there are three external directories should be linked to our project.
+We have integrated our self-brewed caffe into `external/caffe`, which provides batch-normalization and multi-gpu parallel training. Please clone this project with the command:
 
-First is the directory of raw datasets, which can be downloaded at [here](http://pan.baidu.com/s/1kTy9dUv) with password 8hjx. Make a soft link to the root directory of all the datasets:
+    git clone --recursive https://github.com/Cysu/person_reid.git
 
-    mkdir external
+Apart from the official installation [prerequisites](http://caffe.berkeleyvision.org/installation.html), we have several other dependencies: [cudnn-v4](https://developer.nvidia.com/cudnn), openmpi, and 1.55 <= boost < 1.60. You may install them manually or by a package manager (apt-get, pacman, yum, etc.).
+
+Then configure the `Makefile.config` and compile the caffe.
+
+    cd external/caffe
+    cp Makefile.config.example Makefile.config
+    # Configure the libraries properly
+    make -j8 && make py
+
+## Setup environment for experiments
+
+First, download some person re-id datasets at [here](http://pan.baidu.com/s/1kTy9dUv) with password 8hjx. Make a soft link to the root directory:
+
     ln -sf /path/to/the/root/of/datasets external/raw
 
-Next is a directory for our experiments, where later we will put formatted datasets, databases, models, and some results.
+Next, create a directory for our experiments, where later we will put formatted datasets, databases, snapshots, and some results.
 
-    mkdir /path/to/the/experiment/directory
+    mkdir -p /path/to/the/experiment/directory
     ln -sf /path/to/the/experiment/directory external/exp
-
-The last is our [brewed caffe](https://github.com/Cysu/caffe/tree/mydev).
-
-    git clone https://github.com/Cysu/caffe.git /path/to/caffe
-    cd /path/to/caffe && git checkout mydev && cd -
-
-    # Compile the caffe properly.
-    # Please refer to the caffe's repository for detailed instructions.
-
-    # After compilation, link it to our project.
-    ln -sf /path/to/caffe external/caffe
 
 ## Prepare data
 
@@ -37,30 +38,32 @@ Next convert each formatted dataset into a LMDB.
 
     scripts/make_dbs.sh
 
-At last merge all the datasets together in a single-task manner.
+At last merge all the datasets together for the joint single-task learning (JSTL).
 
-    scripts/merge_dbs_single_task.sh
+    scripts/merge_dbs.sh
 
-## Train net
+## Train nets
 
-Some model and solver definitions are provided in `models/`. Use `scripts/train_net.sh dataset_name split_index model_name` to train a model on a dataset, for example, the Joint Single-Task Learning (JSTL) is done by
+Some model and solver definitions are listed in `models/`. Use the shell scripts provided in `scripts/` to run the experiments. **Note that by default the scripts will use two GPUs. You may find the command `mpirun -n 2 ... -gpu 0,1` in the scripts and adapt it with your own settings.**
 
-    mkdir external/exp/models && scripts/train_net.sh jstl 0 googlenet_bn
+As an example, training a net by Joint Single-Task Learning (JSTL) is done by
 
-## Extract features
+    scripts/exp_jstl.sh 0 googlenet_bn
 
-After training a CNN, use `scripts/extract_features.sh dataset_split_name model_name caffemodel_path [blob_name]` to extract features, for example,
+The snapshots will be saved in `external/exp/snapshots/jstl/`.
+
+## Evaluate the performance
+
+After training, use `scripts/extract_features.sh dataset_split_name model_name caffemodel_path [blob_name]` to extract features, for example,
 
     scripts/extract_features.sh cuhk03_split_00 googlenet_bn \
-        external/exp/models/jstl_split_00_googlenet_bn_iter_55000.caffemodel \
-        fc7_bn
+      external/exp/snapshots/jstl/jstl_split_00_googlenet_bn_iter_55000.caffemodel \
+      fc7_bn
 
-## Evaluate by CMC
-
-Use the extracted features to learn a metric and then evaluate by CMC score, for example,
+Then learn a metric and evaluate by CMC score, for example,
 
     python2 eval/metric_learning.py \
-        external/exp/results/cuhk03_split_00_googlenet_bn_fc7_bn_jstl_split_00_googlenet_bn_iter_55000
+      external/exp/results/cuhk03_split_00_googlenet_bn_fc7_bn_jstl_split_00_googlenet_bn_iter_55000
 
 This will print several top-k accuracies, and you may find the top-1 accuracy to be around 73%.
 
