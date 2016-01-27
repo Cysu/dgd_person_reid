@@ -1,0 +1,4 @@
+[submodule "external/caffe"]
+	path = external/caffe
+	url = https://github.com/Cysu/caffe
+	branch = domain-guided-dropout

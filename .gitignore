@@ -47,7 +47,6 @@
 # OSX dir files
 .DS_Store
 
-
 ## Project specific
 *.log
 *.png
@@ -56,4 +55,5 @@
 *.tgz
 *.zip
 *.tar.gz
-external/
+*.caffemodel
+*.solverstate
