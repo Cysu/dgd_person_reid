@@ -18,6 +18,9 @@ make_db () {
   fi
 
   for subset in train val test_probe test_gallery; do
+    if [[ ! -f ${DB_DIR}/${subset}.txt ]]; then
+        continue
+    fi
     echo "Making ${subset} set"
     $CAFFE/build/tools/convert_imageset \
         ${ROOT_DIR}/ ${DB_DIR}/${subset}.txt ${DB_DIR}/${subset}_lmdb \
@@ -29,72 +32,8 @@ make_db () {
       ${DB_DIR}/train_lmdb ${DB_DIR}/mean.binaryproto
 }
 
-
-# cuhk03
-for i in {00..04}; do
-  echo "Making cuhk03 split $i"
-  python2 tools/make_lists_id_training.py \
-      $EXP/datasets/cuhk03/ $EXP/db/cuhk03_split_$i --split-index $i
-  make_db $EXP/datasets/cuhk03 $EXP/db/cuhk03_split_$i
+for d in shinpuhkan; do
+    echo "Making $d"
+    python2 tools/make_lists_id_training.py $EXP/datasets/$d $EXP/db/$d
+    make_db $EXP/datasets/$d $EXP/db/$d
 done
-
-# viper
-for i in {00..09}; do
-  echo "Making viper split $i"
-  python2 tools/make_lists_id_training.py \
-      $EXP/datasets/viper/ $EXP/db/viper_split_$i --split-index $i
-  make_db $EXP/datasets/viper $EXP/db/viper_split_$i
-done
-
-# cuhk01
-for i in {00..09}; do
-  echo "Making cuhk01 split $i"
-  python2 tools/make_lists_id_training.py \
-      $EXP/datasets/cuhk01/ $EXP/db/cuhk01_split_$i --split-index $i
-  make_db $EXP/datasets/cuhk01 $EXP/db/cuhk01_split_$i
-done
-
-# 3dpes
-for i in {00..09}; do
-  echo "Making 3dpes split $i"
-  python2 tools/make_lists_id_training.py \
-      $EXP/datasets/3dpes/ $EXP/db/3dpes_split_$i --split-index $i
-  make_db $EXP/datasets/3dpes $EXP/db/3dpes_split_$i
-done
-
-# ilids
-for i in {00..09}; do
-  echo "Making ilids split $i"
-  python2 tools/make_lists_id_training.py \
-      $EXP/datasets/ilids/ $EXP/db/ilids_split_$i --split-index $i
-  make_db $EXP/datasets/ilids $EXP/db/ilids_split_$i
-done
-
-# prid
-for i in {00..00}; do
-  echo "Making prid split $i"
-  python2 tools/make_lists_id_training.py \
-      $EXP/datasets/prid/ $EXP/db/prid_split_$i --split-index $i
-  make_db $EXP/datasets/prid $EXP/db/prid_split_$i
-done
-
-# shinpuhkan
-echo "Making shinpuhkan split 0"
-python2 tools/make_lists_id_training.py \
-    $EXP/datasets/shinpuhkan $EXP/db/shinpuhkan_split_00 --split-index 00
-rm $EXP/db/shinpuhkan_split_00/test_gallery.txt
-rm $EXP/db/shinpuhkan_split_00/test_probe.txt
-echo "Making train set"
-$CAFFE/build/tools/convert_imageset \
-    $EXP/datasets/shinpuhkan/ $EXP/db/shinpuhkan_split_00/train.txt \
-    $EXP/db/shinpuhkan_split_00/train_lmdb \
-    -resize_height 160 -resize_width 64
-echo "Making val set"
-$CAFFE/build/tools/convert_imageset \
-    $EXP/datasets/shinpuhkan/ $EXP/db/shinpuhkan_split_00/val.txt \
-    $EXP/db/shinpuhkan_split_00/val_lmdb \
-    -resize_height 160 -resize_width 64
-echo "Computing images mean"
-$CAFFE/build/tools/compute_image_mean \
-    $EXP/db/shinpuhkan_split_00/train_lmdb \
-    $EXP/db/shinpuhkan_split_00/mean.binaryproto

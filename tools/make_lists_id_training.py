@@ -21,8 +21,7 @@ def _save(file_label_list, file_path):
 
 def main(args):
     meta = read_json(osp.join(args.dataset_dir, 'meta.json'))
-    split = read_json(osp.join(args.dataset_dir,
-            'split_{:02d}.json'.format(args.split_index)))
+    split = read_json(osp.join(args.dataset_dir, 'split.json'))
     identities = np.asarray(meta['identities'])
     # Make train / val. Consider single or multiple shot.
     trainval = identities[split['trainval']]
@@ -69,12 +68,17 @@ def main(args):
 
 if __name__ == '__main__':
     parser = ArgumentParser(
-            description="Create lists of image file and label for making lmdbs")
-    parser.add_argument('dataset_dir', help="Directory of a formatted dataset")
-    parser.add_argument('output_dir', help="Output directory for the lists")
-    parser.add_argument('--split-index', type=int, default=0,
-            help="The index of the protocol split to be used")
-    parser.add_argument('--val-ratio', type=float, default=0.2,
-            help="Ratio between validation and trainval data. Default 0.2.")
+        description="Create lists of image file and label for making lmdbs")
+    parser.add_argument(
+        'dataset_dir',
+        help="Directory of a formatted dataset")
+    parser.add_argument(
+        'output_dir',
+        help="Output directory for the lists")
+    parser.add_argument(
+        '--val-ratio',
+        type=float,
+        default=0.2,
+        help="Ratio between validation and trainval data. Default 0.2.")
     args = parser.parse_args()
     main(args)
