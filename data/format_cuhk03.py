@@ -64,29 +64,30 @@ def main(args):
     meta = {'name': 'cuhk03', 'shot': 'multiple', 'num_cameras': 2}
     meta['identities'] = identities
     write_json(meta, osp.join(output_dir, 'meta.json'))
-    # Save training and test splits into json files
+    # Save training and test splits into a json file
     view_counts = [a.shape[0] for a in matdata['labeled'].squeeze()]
     vid_offsets = np.r_[0, np.cumsum(view_counts)]
-    for split_id, test_info in enumerate(matdata['testsets'].squeeze()):
-        test_pids = []
-        for i, j in test_info:
-            pid = vid_offsets[i - 1] + j - 1
-            test_pids.append(pid)
-        test_pids.sort()
-        trainval_pids = list(set(xrange(vid_offsets[-1])) - set(test_pids))
-        split = {'trainval': trainval_pids,
-                 'test_probe': test_pids,
-                 'test_gallery': test_pids}
-        file_name = osp.join(output_dir, 'split_{:02d}.json'.format(split_id))
-        write_json(split, file_name)
+    test_info = np.random.choice(matdata['testsets'].squeeze())
+    test_pids = []
+    for i, j in test_info:
+        pid = vid_offsets[i - 1] + j - 1
+        test_pids.append(pid)
+    test_pids.sort()
+    trainval_pids = list(set(xrange(vid_offsets[-1])) - set(test_pids))
+    split = {'trainval': trainval_pids,
+             'test_probe': test_pids,
+             'test_gallery': test_pids}
+    write_json(split, osp.join(output_dir, 'split.json'))
 
 
 if __name__ == '__main__':
     parser = ArgumentParser(
-            description="Convert the CUHK-03 dataset into the uniform format")
-    parser.add_argument('cuhk03_dir',
-            help="Root directory of the CUHK-03 dataset containing cuhk-03.mat")
-    parser.add_argument('output_dir',
-            help="Output directory for the formatted CUHK-03 dataset")
+        description="Convert the CUHK-03 dataset into the uniform format")
+    parser.add_argument(
+        'cuhk03_dir',
+        help="Root directory of the CUHK-03 dataset containing cuhk-03.mat")
+    parser.add_argument(
+        'output_dir',
+        help="Output directory for the formatted CUHK-03 dataset")
     args = parser.parse_args()
     main(args)

@@ -40,7 +40,7 @@ def main(args):
     split = {'trainval': range(len(identities)),
              'test_probe': [],
              'test_gallery': []}
-    write_json(split, osp.join(args.output_dir, 'split_00.json'))
+    write_json(split, osp.join(args.output_dir, 'split.json'))
 
 
 if __name__ == '__main__':

@@ -37,17 +37,15 @@ def main(args):
     meta = {'name': 'i-LIDS', 'shot': 'multiple', 'num_cameras': 2}
     meta['identities'] = identities
     write_json(meta, osp.join(output_dir, 'meta.json'))
-    # Randomly create 10 training and test splits
+    # Randomly create a training and test split
     num = len(identities)
-    for split_id in xrange(10):
-        pids = np.random.permutation(num)
-        trainval_pids = sorted(pids[:num // 2])
-        test_pids = sorted(pids[num // 2:])
-        split = {'trainval': trainval_pids,
-                 'test_probe': test_pids,
-                 'test_gallery': test_pids}
-        file_name = osp.join(output_dir, 'split_{:02d}.json'.format(split_id))
-        write_json(split, file_name)
+    pids = np.random.permutation(num)
+    trainval_pids = sorted(pids[:num // 2])
+    test_pids = sorted(pids[num // 2:])
+    split = {'trainval': trainval_pids,
+             'test_probe': test_pids,
+             'test_gallery': test_pids}
+    write_json(split, osp.join(output_dir, 'split.json'))
 
 
 if __name__ == '__main__':
