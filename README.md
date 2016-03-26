@@ -17,111 +17,72 @@ Then configure the `Makefile.config` and compile the caffe.
     # Configure the libraries properly
     make -j8 && make py
 
-## Setup environment for experiments
+## Download datasets
 
-First, download some person re-id datasets at [here](http://pan.baidu.com/s/1kTy9dUv) with password 8hjx. Make a soft link to the root directory:
+Download the following datasets.
+
+1.  [CUHK03](https://docs.google.com/spreadsheet/viewform?usp=drive_web&formkey=dHRkMkFVSUFvbTJIRkRDLWRwZWpONnc6MA#gid=0)
+2.  [CUHK01](https://docs.google.com/spreadsheet/viewform?formkey=dF9pZ1BFZkNiMG1oZUdtTjZPalR0MGc6MA)
+3.  [PRID](https://lrs.icg.tugraz.at/datasets/prid/prid_2011.zip)
+4.  [VIPeR](http://soe.ucsc.edu/~manduchi/VIPeR.v1.0.zip)
+5.  [3DPeS](http://imagelab.ing.unimore.it/3DPeS/3dPES_data/3DPeS_ReId_Snap.zip)
+6.  [i-LIDS](https://drive.google.com/open?id=0B67_d0rLRTQYRjQ2T3o1NmxvVE0) (I cannot find the link to the original dataset. This is my previous backup version.)
+7.  [Shinpuhkan](http://www.mm.media.kyoto-u.ac.jp/en/datasets/shinpuhkan) (need to send an email to the authors)
+
+Link the root directory of these datasets to our project.
 
     ln -sf /path/to/the/root/of/datasets external/raw
 
-Next, create a directory for our experiments, where later we will put formatted datasets, databases, snapshots, and some results.
-
-    mkdir -p /path/to/the/experiment/directory
-    ln -sf /path/to/the/experiment/directory external/exp
-
 ## Prepare data
 
-First we need to format raw datasets into our uniform data format.
+1.  Create a directory for experiment data and results
 
-    scripts/format_rawdata.sh
+        mkdir -p external/exp
 
-Next convert each formatted dataset into a LMDB.
+    or link against another external directory
 
-    scripts/make_dbs.sh
+        ln -s /path/to/your/exp/directory external/exp
 
-At last merge all the datasets together for the joint single-task learning (JSTL).
+2.  Convert raw datasets into a uniform data format
 
-    scripts/merge_dbs.sh
+        scripts/format_rawdata.sh
 
-## Train nets
+3.  Convert formatted datasets into LMDBs.
 
-Some model and solver definitions are listed in `models/`. Use the shell scripts provided in `scripts/` to run the experiments. **Note that by default the scripts will use two GPUs. You may find the command `mpirun -n 2 ... -gpu 0,1` in the scripts and adapt it with your own settings.**
+        scripts/make_dbs.sh
 
-As an example, training a net by Joint Single-Task Learning (JSTL) is done by
+4.  Merge all the datasets together for the joint single-task learning (JSTL).
 
-    scripts/exp_jstl.sh 0 googlenet_bn
+        scripts/merge_dbs.sh
 
-The snapshots will be saved in `external/exp/snapshots/jstl/`.
+## Experiments
 
-## Evaluate the performance
+Our experiments are organized into several groups:
 
-After training, use `scripts/extract_features.sh dataset_split_name model_name caffemodel_path [blob_name]` to extract features, for example,
+1.  Baseline: training individually on each dataset
+2.  Baseline: joint single task learning (JSTL)
+3.  Our method: JSTL with domain guided dropout (DGD)
+4.  Additional leave-one-out experiments
 
-    scripts/extract_features.sh cuhk03_split_00 googlenet_bn \
-      external/exp/snapshots/jstl/jstl_split_00_googlenet_bn_iter_55000.caffemodel \
-      fc7_bn
+### Baseline: training individually on each dataset
 
-Then learn a metric and evaluate by CMC score, for example,
+To train and test a model individually on a dataset, just run the script
 
-    python2 eval/metric_learning.py \
-      external/exp/results/cuhk03_split_00_googlenet_bn_fc7_bn_jstl_split_00_googlenet_bn_iter_55000
+    scripts/train_test.sh individually prid
 
-This will print several top-k accuracies, and you may find the top-1 accuracy to be around 73%.
+where the last parameter is the dataset name, can be one of `cuhk03`, `cuhk01`, `prid`, `viper`, `3dpes`, `ilids`.
 
-## Datasets
+## Referenced Datasets
 
-We summarize some commonly used person re-id datasets below. They can be downlaoded from [here](http://pan.baidu.com/s/1kTy9dUv) with password 8hjx.
+We summarize some commonly used person re-id datasets below.
 
-<table>
-  <tr>
-    <th>Name</th>
-    <th>Reference</th>
-  </tr>
-  <tr>
-    <td>3DPeS</td>
-    <td>D. Baltieri, et al., 3DPes: 3D people dataset for surveillance and forensics</td>
-  </tr>
-  <tr>
-    <td>CUHK01</td>
-    <td>W. Li, et al., Human reidentification with transferred metric learning</td>
-  </tr>
-  <tr>
-    <td>CUHK02</td>
-    <td>W. Li, et al., Locally Aligned Feature Transforms across Views</td>
-  </tr>
-  <tr>
-    <td>CUHK03</td>
-    <td>W. Li, et al., Deepreid: Deep filter pairing neural network for person re-identification</td>
-  </tr>
-  <tr>
-    <td>i-LIDS</td>
-    <td>W. Zheng, et al., Associating groups of people</td>
-  </tr>
-  <tr>
-    <td>i-LIDS-VID</td>
-    <td>T. Wang, et al., Person Re-Identification by Video Ranking</td>
-  </tr>
-  <tr>
-    <td>Market-1501</td>
-    <td>L. Zheng, et al., Scalable Person Re-identification: A Benchmark</td>
-  </tr>
-  <tr>
-    <td>OPeRID</td>
-    <td>S. Liao, et al., Open-set Person Re-identification</td>
-  </tr>
-  <tr>
-    <td>PRID</td>
-    <td>M. Hirzer, et al., Person re-identification by descriptive and discriminative classification</td>
-  </tr>
-  <tr>
-    <td>RAiD</td>
-    <td>A. Das et al., Consistent re-identification in a camera network</td>
-  </tr>
-  <tr>
-    <td>Shinpuhkan</td>
-    <td>Y. Kawanishi, et al., Shinpuhkan2014: A Multi-Camera Pedestrian Dataset for Tracking People across Multiple Cameras</td>
-  </tr>
-  <tr>
-    <td>VIPeR</td>
-    <td>D. Gray, et al., Evaluating appearance models for recognition, reacquisition, and tracking</td>
-  </tr>
-</table>
+| Name       | Reference                                                                                                        |
+|------------|------------------------------------------------------------------------------------------------------------------|
+| 3DPeS      | Baltieri, et al., 3DPes: 3D people dataset for surveillance and forensics                                        |
+| CUHK01     | Li, et al., Human reidentification with transferred metric learning                                              |
+| CUHK02     | Li, et al., Locally Aligned Feature Transforms across Views                                                      |
+| CUHK03     | Li, et al., Deepreid: Deep filter pairing neural network for person re-identification                            |
+| i-LIDS     | Zheng, et al., Associating groups of people                                                                      |
+| PRID       | Hirzer, et al., Person re-identification by descriptive and discriminative classification                        |
+| Shinpuhkan | Kawanishi, et al., Shinpuhkan2014: A Multi-Camera Pedestrian Dataset for Tracking People across Multiple Cameras |
+| VIPeR      | Gray, et al., Evaluating appearance models for recognition, reacquisition, and tracking                          |
