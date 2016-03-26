@@ -1,0 +1,21 @@
+net: "models/individually/ilids_trainval.prototxt"
+test_iter: 3
+test_interval: 20
+test_initialization: true
+
+display: 20
+average_loss: 20
+iter_size: 2
+
+lr_policy: "stepdecr"
+base_lr: 0.1
+gamma: 0.04
+stepsize: 100
+max_iter: 2700
+min_lr: 0.0005
+
+momentum: 0.9
+weight_decay: 0.0005
+
+snapshot_prefix: "external/exp/snapshots/individually/ilids"
+solver_mode: GPU

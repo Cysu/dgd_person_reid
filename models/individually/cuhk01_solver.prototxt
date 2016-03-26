@@ -1,0 +1,21 @@
+net: "models/individually/cuhk01_trainval.prototxt"
+test_iter: 20
+test_interval: 100
+test_initialization: true
+
+display: 20
+average_loss: 20
+iter_size: 2
+
+lr_policy: "stepdecr"
+base_lr: 0.1
+gamma: 0.04
+stepsize: 200
+max_iter: 5500
+min_lr: 0.0005
+
+momentum: 0.9
+weight_decay: 0.0005
+
+snapshot_prefix: "external/exp/snapshots/individually/cuhk01"
+solver_mode: GPU
