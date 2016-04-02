@@ -1,16 +1,16 @@
-name: "CUHK01_GoogLeNet_BN"
+name: "iLIDS"
 richness: 1000
 
 ##################################### data #####################################
 layer { name: "data" type: "Data" top: "data" top: "label"
   data_param { backend: LMDB batch_size: 100 shuffle_pool_size: 10
-    source: "external/exp/db/cuhk01_split_${split_index}/train_lmdb" }
+    source: "external/exp/db/ilids/train_lmdb" }
   transform_param { mirror: true crop_height: 144 crop_width: 56
     mean_value: 102 mean_value: 102 mean_value: 101 }
   include: { phase: TRAIN } }
 layer { name: "data" type: "Data" top: "data" top: "label"
   data_param { backend: LMDB batch_size: 20
-    source: "external/exp/db/cuhk01_split_${split_index}/val_lmdb" }
+    source: "external/exp/db/ilids/val_lmdb" }
   transform_param { mirror: false crop_height: 144 crop_width: 56
     mean_value: 102 mean_value: 102 mean_value: 101 }
   include: { phase: TEST } }
@@ -1441,11 +1441,11 @@ layer {
 }
 
 ####################################### loss accuracy #######################################
-layer { name: "fc8_cuhk01" type: "InnerProduct" bottom: "fc7" top: "fc8_cuhk01"
+layer { name: "fc8_ilids" type: "InnerProduct" bottom: "fc7" top: "fc8_ilids"
   param { lr_mult: 1 decay_mult: 1 } param { lr_mult: 2 decay_mult: 0 }
-  inner_product_param { num_output: 971
+  inner_product_param { num_output: 119
     weight_filler { type: "gaussian" std: 0.001 }
     bias_filler { type: "constant" value: 0 } } }
-layer { name: "loss" type: "SoftmaxWithLoss" bottom: "fc8_cuhk01" bottom: "label" top: "loss" }
-layer { name: "accuracy" type: "Accuracy" bottom: "fc8_cuhk01" bottom: "label" top: "accuracy"
+layer { name: "loss" type: "SoftmaxWithLoss" bottom: "fc8_ilids" bottom: "label" top: "loss" }
+layer { name: "accuracy" type: "Accuracy" bottom: "fc8_ilids" bottom: "label" top: "accuracy"
   include { phase: TEST } }
