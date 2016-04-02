@@ -5,6 +5,7 @@ test_initialization: true
 
 display: 20
 average_loss: 20
+iter_size: 2
 
 lr_policy: "poly"
 base_lr: 0.01
