@@ -86,6 +86,20 @@ Then, fine-tune the pretrained model on each dataset and evaluate the performanc
 
 The CMC accuracies printed out are corresponding to the FT-JSTL entries in Table 3 of our paper.
 
+### Our method: JSTL with domain guided dropout (DGD)
+
+Based on the pretrained JSTL model, we can compute the neuron impact scores (NIS) for each dataset, and resume the JSTL training with domain guided dropout.
+
+    scripts/exp_dgd.sh
+
+The CMC accuracies printed out are corresponding to the JSTL+DGD entries in Table 3 of our paper.
+
+Then, fine-tune the model on each dataset with domain guided dropout and evaluate the performance
+
+    scripts/exp_ft_dgd.sh
+
+The CMC accuracies printed out are corresponding to the FT-(JSTL+DGD) entries in Table 3 of our paper.
+
 ## Referenced Datasets
 
 We summarize some commonly used person re-id datasets below.
