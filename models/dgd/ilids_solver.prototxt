@@ -1,0 +1,19 @@
+net: "models/dgd/ilids_trainval.prototxt"
+test_iter: 3
+test_interval: 50
+test_initialization: true
+
+display: 20
+average_loss: 20
+iter_size: 2
+
+lr_policy: "poly"
+base_lr: 0.01
+power: 0.5
+max_iter: 500
+
+momentum: 0.9
+weight_decay: 0.0005
+
+snapshot_prefix: "external/exp/snapshots/dgd/ilids"
+solver_mode: GPU
