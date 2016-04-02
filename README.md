@@ -68,9 +68,23 @@ Our experiments are organized into several groups:
 
 To train and test a model individually on a dataset, just run the script
 
-    scripts/train_test.sh individually prid
+    scripts/exp_individually.sh prid
 
-where the last parameter is the dataset name, can be one of `cuhk03`, `cuhk01`, `prid`, `viper`, `3dpes`, `ilids`.
+where the parameter is the dataset name, can be one of `cuhk03`, `cuhk01`, `prid`, `viper`, `3dpes`, `ilids`.
+
+### Baseline: joint single task learning (JSTL)
+
+First, pretrain a model using the mixed dataset with JSTL
+
+    scripts/exp_jstl.sh
+
+After training, the script will use the pretrained model to do the evaluation directly on each individual dataset. The CMC accuracies printed out are corresponding to the JSTL entries in Table 3 of our paper.
+
+Then, fine-tune the pretrained model on each dataset and evaluate the performance
+
+    scripts/exp_ft_jstl.sh
+
+The CMC accuracies printed out are corresponding to the FT-JSTL entries in Table 3 of our paper.
 
 ## Referenced Datasets
 
