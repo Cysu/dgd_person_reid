@@ -9,6 +9,7 @@ DATASETS_DIR=${EXP_DIR}/datasets
 DB_DIR=${EXP_DIR}/db
 RESULTS_DIR=${EXP_DIR}/results
 SNAPSHOTS_DIR=${EXP_DIR}/snapshots
+NIS_DIR=${EXP_DIR}/nis
 
 MODELS_DIR=models
 LOGS_DIR=logs
@@ -24,10 +25,26 @@ get_trained_model() {
   echo ${model}
 }
 
+get_trained_model_for_inference() {
+  local exp=$1
+  local dataset=$2
+
+  local solver=${MODELS_DIR}/${exp}/${dataset}_solver.prototxt
+  local max_iter=$(grep 'max_iter' ${solver} | awk '{print $2}')
+  local snapshot_prefix=$(grep 'snapshot_prefix' ${solver} | awk -F '"' '{print $2}')
+  local model=${snapshot_prefix}_iter_${max_iter}_inference.caffemodel
+  echo ${model}
+}
+
 get_result_dir() {
   local exp=$1
   local dataset=$2
   local trained_model=$3
+  if [[ $# -eq 4 ]]; then
+    local blob=$4
+  else
+    local blob=fc7_bn
+  fi
 
   local weights_name=$(basename ${trained_model})
   local weights_name="${weights_name%%.*}"
@@ -63,9 +80,9 @@ extract_features() {
   local dataset=$2
   local trained_model=$3
   if [[ $# -eq 4 ]]; then
-    blob=$4
+    local blob=$4
   else
-    blob=fc7_bn
+    local blob=fc7_bn
   fi
 
   local result_dir=$(get_result_dir ${exp} ${dataset} ${trained_model})
@@ -105,4 +122,34 @@ test_model() {
   # Evaluate performance
   local result_dir=$(get_result_dir ${exp} ${dataset} ${trained_model})
   python2 eval/metric_learning.py ${result_dir}
+}
+
+compute_neuron_impact_scores() {
+  local dataset=$1
+  local inference_model=$2
+  if [[ $# -eq 3 ]]; then
+    local layer=$3
+  else
+    local layer=fc7  # Here fc7 is default because we use the inference model
+  fi
+
+  # Fine-tune the id-classifier only
+  train_model fc_only ${dataset} ${inference_model}
+  local finetuned_model=$(get_trained_model fc_only ${dataset})
+
+  # Compute NIS
+  local model=${MODELS_DIR}/fc_only/${dataset}_trainval.prototxt
+  local num_samples=$(wc -l ${DB_DIR}/${dataset}/val.txt | awk '{print $1}')
+  local num_samples=$((num_samples + 1))
+  local num_iters=$(((num_samples + 19) / 20))
+  local output_npy=${NIS_DIR}/${dataset}.npy
+  mkdir -p $(dirname ${output_npy})
+  python2 tools/compute_impact_score.py \
+    ${model} ${finetuned_model} ${output_npy} \
+    --num_iters ${num_iters} --layer ${layer} --normalize
+
+  # Save NIS to LMDB
+  local output_lmdb=${DB_DIR}/${dataset}/nis_lmdb
+  python2 tools/save_individual_impact_score.py \
+    ${output_npy} ${output_lmdb}
 }
