@@ -1,11 +1,19 @@
-name: "JSTL_GoogLeNet_BN"
+name: "JSTL"
 richness: 1000
 
-input: "data"
-input_dim: 1
-input_dim: 3
-input_dim: 144
-input_dim: 56
+##################################### data #####################################
+layer { name: "data" type: "Data" top: "data" top: "label"
+  data_param { backend: LMDB batch_size: 50 shuffle_pool_size: 10
+    source: "external/exp/db/jstl/train_lmdb" }
+  transform_param { mirror: true crop_height: 144 crop_width: 56
+    mean_value: 102 mean_value: 102 mean_value: 101 }
+  include: { phase: TRAIN } }
+layer { name: "data" type: "Data" top: "data" top: "label"
+  data_param { backend: LMDB batch_size: 20
+    source: "external/exp/db/jstl/val_lmdb" }
+  transform_param { mirror: false crop_height: 144 crop_width: 56
+    mean_value: 102 mean_value: 102 mean_value: 101 }
+  include: { phase: TEST } }
 
 ####################################### conv1 ######################################
 layer { name: "conv1" type: "Convolution" bottom: "data" top: "conv1"
@@ -462,3 +470,6 @@ layer { name: "fc8_jstl" type: "InnerProduct" bottom: "fc7_bn" top: "fc8_jstl"
   inner_product_param { num_output: 2629
     weight_filler { type: "gaussian" std: 0.001 }
     bias_filler { type: "constant" value: 0 } } }
+layer { name: "loss" type: "SoftmaxWithLoss" bottom: "fc8_jstl" bottom: "label" top: "loss" }
+layer { name: "accuracy" type: "Accuracy" bottom: "fc8_jstl" bottom: "label" top: "accuracy"
+  include { phase: TEST } }
