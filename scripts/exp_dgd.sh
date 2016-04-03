@@ -8,8 +8,8 @@ source scripts/routines.sh
 
 exp='dgd'
 
-Make a model for inference (treat BN as fixed affine layer)
-to fast the neuron impact scores computation
+# Make a model for inference (treat BN as fixed affine layer)
+# to fast the neuron impact scores computation
 trained_model=$(get_trained_model jstl jstl)
 python2 ${CAFFE_DIR}/python/gen_bn_inference.py \
   models/jstl/jstl_deploy.prototxt ${trained_model}
