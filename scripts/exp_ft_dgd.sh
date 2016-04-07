@@ -16,11 +16,9 @@ python2 ${CAFFE_DIR}/python/gen_bn_inference.py \
 inference_model=$(get_trained_model_for_inference jstl jstl)
 
 # Compute neuron impact scores (NIS) for each dataset
-# for dataset in cuhk03 cuhk01 prid viper 3dpes ilids shinpuhkan; do
-for dataset in prid; do
+for dataset in cuhk03 cuhk01 prid viper 3dpes ilids; do
   compute_neuron_impact_scores ${dataset} ${inference_model}
 done
-
 
 # Fine-tune on each dataset
 for dataset in cuhk03 cuhk01 prid viper 3dpes ilids; do
