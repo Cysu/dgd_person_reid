@@ -10,7 +10,7 @@ iter_size: 2
 lr_policy: "poly"
 base_lr: 0.01
 power: 0.5
-max_iter: 500
+max_iter: 1000
 
 momentum: 0.9
 weight_decay: 0.0005
