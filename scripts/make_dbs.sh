@@ -32,7 +32,7 @@ make_db () {
       ${DB_DIR}/train_lmdb ${DB_DIR}/mean.binaryproto
 }
 
-for d in shinpuhkan; do
+for d in cuhk03 cuhk01 prid viper 3dpes ilids shinpuhkan; do
     echo "Making $d"
     python2 tools/make_lists_id_training.py $EXP/datasets/$d $EXP/db/$d
     make_db $EXP/datasets/$d $EXP/db/$d
