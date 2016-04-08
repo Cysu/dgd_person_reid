@@ -61,7 +61,7 @@ Our experiments are organized into several groups:
 
 1.  Baseline: training individually on each dataset
 2.  Baseline: joint single task learning (JSTL)
-3.  Our method: JSTL with domain guided dropout (DGD)
+3.  Our method: domain guided dropout (DGD)
 4.  Additional leave-one-out experiments
 
 ### Baseline: training individually on each dataset
@@ -80,21 +80,15 @@ First, pretrain a model using the mixed dataset with JSTL
 
 After training, the script will use the pretrained model to do the evaluation directly on each individual dataset. The CMC accuracies printed out are corresponding to the JSTL entries in Table 3 of our paper.
 
-Then, fine-tune the pretrained model on each dataset and evaluate the performance
+### Our method: domain guided dropout (DGD)
 
-    scripts/exp_ft_jstl.sh
-
-The CMC accuracies printed out are corresponding to the FT-JSTL entries in Table 3 of our paper.
-
-### Our method: JSTL with domain guided dropout (DGD)
-
-Based on the pretrained JSTL model, we can compute the neuron impact scores (NIS) for each dataset, and resume the JSTL training with domain guided dropout.
+Based on the pretrained JSTL model, we first compute the neuron impact scores (NIS) for each dataset, and then resume the JSTL training with deterministic DGD.
 
     scripts/exp_dgd.sh
 
 The CMC accuracies printed out are corresponding to the JSTL+DGD entries in Table 3 of our paper.
 
-Then, fine-tune the model on each dataset with domain guided dropout and evaluate the performance
+At last, to achieve the best performance, we can fine-tune the model on each dataset with stochastic DGD
 
     scripts/exp_ft_dgd.sh
 
@@ -102,7 +96,7 @@ The CMC accuracies printed out are corresponding to the FT-(JSTL+DGD) entries in
 
 ## Referenced Datasets
 
-We summarize some commonly used person re-id datasets below.
+We summarize the person re-id datasets used in this project as below.
 
 | Name       | Reference                                                                                                        |
 |------------|------------------------------------------------------------------------------------------------------------------|
