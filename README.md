@@ -1,6 +1,6 @@
 # Person Re-identification
 
-This is a person re-identification (re-id) project that aims at learning generic deep features from multiple person re-id datasets.
+This project aims at learning generic person re-identification (re-id) deep features from multiple person re-id datasets.
 
 ## Installation
 
@@ -8,7 +8,7 @@ We have integrated our self-brewed caffe into `external/caffe`, which provides b
 
     git clone --recursive https://github.com/Cysu/person_reid.git
 
-Apart from the official installation [prerequisites](http://caffe.berkeleyvision.org/installation.html), we have several other dependencies: [cudnn-v4](https://developer.nvidia.com/cudnn), openmpi, and 1.55 <= boost < 1.60. You may install them manually or by a package manager (apt-get, pacman, yum, etc.).
+Apart from the official installation [prerequisites](http://caffe.berkeleyvision.org/installation.html), we have several other dependencies: cudnn-v4, openmpi, and 1.55 <= boost < 1.60. You may install them manually or by a package manager (apt-get, pacman, yum, etc.).
 
 Then configure the `Makefile.config` and compile the caffe.
 
@@ -16,6 +16,11 @@ Then configure the `Makefile.config` and compile the caffe.
     cp Makefile.config.example Makefile.config
     # Configure the libraries properly
     make -j8 && make py
+
+Some other prerequisites are
+
+1.  Matlab (to pre-process the CUHK03 dataset)
+2.  python2 packages: numpy, scipy, Pillow, scikit-learn, protobuf, lmdb
 
 ## Download datasets
 
@@ -47,22 +52,26 @@ Link the root directory of these datasets to our project.
 
         scripts/format_rawdata.sh
 
-3.  Convert formatted datasets into LMDBs.
+3.  Convert formatted datasets into LMDBs
 
         scripts/make_dbs.sh
 
-4.  Merge all the datasets together for the joint single-task learning (JSTL).
+4.  Merge all the datasets together for the joint single-task learning (JSTL)
 
         scripts/merge_dbs.sh
 
 ## Experiments
 
-Our experiments are organized into several groups:
+**Note: We use two GPUs to train the models by default. Change the `mpirun -n 2 ... -gpu 0,1` in `scripts/routines.sh` to your own hardware configuration if necessary.**
+
+Our experiments are organized into two groups:
 
 1.  Baseline: training individually on each dataset
-2.  Baseline: joint single task learning (JSTL)
-3.  Our method: domain guided dropout (DGD)
-4.  Additional leave-one-out experiments
+2.  Ours: Joint single task learning (JSTL) + Domain guided dropout (DGD)
+
+We provide a pretrained JSTL+DGD model [here](https://drive.google.com/open?id=0B67_d0rLRTQYZnB5ZUZpdTlxM0k) that can be used as a generic person re-id feature extractor.
+
+Some archived experiment logs can be found at `archived/`.
 
 ### Baseline: training individually on each dataset
 
@@ -72,27 +81,28 @@ To train and test a model individually on a dataset, just run the script
 
 where the parameter is the dataset name, can be one of `cuhk03`, `cuhk01`, `prid`, `viper`, `3dpes`, `ilids`.
 
-### Baseline: joint single task learning (JSTL)
+### Ours: Joint single task learning (JSTL) + Domain guided dropout (DGD)
 
-First, pretrain a model using the mixed dataset with JSTL
+1. Pretrain a model using the mixed dataset with JSTL. The CMC accuracies printed out are corresponding to the **JSTL** entries in Table 3 of our paper.
 
-    scripts/exp_jstl.sh
+        scripts/exp_jstl.sh
 
-After training, the script will use the pretrained model to do the evaluation directly on each individual dataset. The CMC accuracies printed out are corresponding to the JSTL entries in Table 3 of our paper.
+2. Based on the pretrained JSTL model, we first compute the neuron impact scores (NIS) for each dataset, and then resume the JSTL training with deterministic DGD. The CMC accuracies printed out are corresponding to the **JSTL+DGD** entries in Table 3 of our paper.
 
-### Our method: domain guided dropout (DGD)
+        scripts/exp_dgd.sh
 
-Based on the pretrained JSTL model, we first compute the neuron impact scores (NIS) for each dataset, and then resume the JSTL training with deterministic DGD.
+    At last, to achieve the best performance, we can fine-tune the model on each dataset with stochastic DGD. The CMC accuracies printed out are corresponding to the **FT-(JSTL+DGD)** entries in Table 3 of our paper.
 
-    scripts/exp_dgd.sh
+        scripts/exp_ft_dgd.sh
 
-The CMC accuracies printed out are corresponding to the JSTL+DGD entries in Table 3 of our paper.
+## Citation
 
-At last, to achieve the best performance, we can fine-tune the model on each dataset with stochastic DGD
-
-    scripts/exp_ft_dgd.sh
-
-The CMC accuracies printed out are corresponding to the FT-(JSTL+DGD) entries in Table 3 of our paper.
+    @inproceedings{xiao2016learning,
+      title={Learning Deep Feature Representations with Domain Guided Dropout for Person Re-identification},
+      author={Xiao, Tong and Li, Hongsheng and Ouyang, Wanli and Wang, Xiaogang},
+      booktitle={CVPR},
+      year={2016}
+    }
 
 ## Referenced Datasets
 
