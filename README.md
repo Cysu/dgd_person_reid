@@ -1,6 +1,6 @@
-# Person Re-identification
+# Domain Guided Dropout for Person Re-identification
 
-This project aims at learning generic person re-identification (re-id) deep features from multiple person re-id datasets.
+This project aims at learning generic person re-identification (re-id) deep features from multiple person re-id datasets with domain guided dropout.
 
 ## Installation
 
