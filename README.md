@@ -1,6 +1,6 @@
-# Domain Guided Dropout for Person Re-identification
+# Domain Guided Dropout for Person Re-id
 
-This project aims at learning generic person re-identification (re-id) deep features from multiple person re-id datasets with domain guided dropout.
+This project aims at learning generic person re-identification (re-id) deep features from multiple datasets with domain guided dropout. Mainly based on our CVPR 2016 paper [Learning Deep Feature Representations with Domain Guided Dropout for Person Re-identification](Learning Deep Feature Representations with Domain Guided Dropout for Person Re-identification).
 
 ## Installation
 
@@ -69,7 +69,7 @@ Our experiments are organized into two groups:
 1.  Baseline: training individually on each dataset
 2.  Ours: Joint single task learning (JSTL) + Domain guided dropout (DGD)
 
-We provide a pretrained JSTL+DGD model [here](https://drive.google.com/open?id=0B67_d0rLRTQYZnB5ZUZpdTlxM0k) that can be used as a generic person re-id feature extractor.
+We provide a **pretrained JSTL+DGD model [here](https://drive.google.com/open?id=0B67_d0rLRTQYZnB5ZUZpdTlxM0k)** that can be used as a generic person re-id feature extractor.
 
 Some archived experiment logs can be found at `archived/`.
 
