@@ -10,7 +10,7 @@ We have integrated our self-brewed caffe into `external/caffe`, which provides b
 
 Apart from the official installation [prerequisites](http://caffe.berkeleyvision.org/installation.html), we have several other dependencies: cudnn-v4, openmpi, and 1.55 <= boost < 1.60. You may install them manually or by a package manager (apt-get, pacman, yum, etc.).
 
-Then configure the `Makefile.config` and compile the caffe.
+Then configure the `Makefile.config` and compile the caffe. To use multi-GPU for training, please uncomment the MPI parallel block in the `Makefile.config` and set the `MPI_INCLUDE` and `MPI_LIB` properly. Please find more details of using the caffe [here](https://github.com/Cysu/caffe/tree/domain-guided-dropout).
 
     cd external/caffe
     cp Makefile.config.example Makefile.config
