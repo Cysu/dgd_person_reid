@@ -6,7 +6,7 @@ This project aims at learning generic person re-identification (re-id) deep feat
 
 We have integrated our self-brewed caffe into `external/caffe`, which provides batch-normalization and multi-gpu parallel training. Please clone this project with the command:
 
-    git clone --recursive https://github.com/Cysu/person_reid.git
+    git clone --recursive https://github.com/Cysu/dgd_person_reid.git
 
 Apart from the official installation [prerequisites](http://caffe.berkeleyvision.org/installation.html), we have several other dependencies: cudnn-v4, openmpi, and 1.55 <= boost < 1.60. You may install them manually or by a package manager (apt-get, pacman, yum, etc.).
 
