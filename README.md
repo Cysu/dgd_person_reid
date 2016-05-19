@@ -8,7 +8,7 @@ We have integrated our self-brewed caffe into `external/caffe`, which provides b
 
     git clone --recursive https://github.com/Cysu/dgd_person_reid.git
 
-Apart from the official installation [prerequisites](http://caffe.berkeleyvision.org/installation.html), we have several other dependencies: cudnn-v4, openmpi, and 1.55 <= boost < 1.60. You may install them manually or by a package manager (apt-get, pacman, yum, etc.).
+Apart from the official installation [prerequisites](http://caffe.berkeleyvision.org/installation.html), we have several other dependencies: cudnn-v4, openmpi, and 1.55 <= boost < 1.60. You may install them manually or by a package manager (a tip for installing boost 1.55 on Ubuntu 14.04: `sudo apt-get autoremove libboost1.54*` then `sudo apt-get install libboost1.55-all-dev`).
 
 Then configure the `Makefile.config` and compile the caffe. To use multi-GPU for training, please uncomment the MPI parallel block in the `Makefile.config` and set the `MPI_INCLUDE` and `MPI_LIB` properly. Please find more details of using the caffe [here](https://github.com/Cysu/caffe/tree/domain-guided-dropout).
 
@@ -21,6 +21,7 @@ Some other prerequisites are
 
 1.  Matlab (to pre-process the CUHK03 dataset)
 2.  python2 packages: numpy, scipy, Pillow, scikit-learn, protobuf, lmdb
+3.  Add `export PYTHONPATH=".:$PYTHONPATH"` to `~/.bashrc` and restart the terminal
 
 ## Download datasets
 
