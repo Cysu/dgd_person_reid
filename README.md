@@ -1,6 +1,6 @@
 # Domain Guided Dropout for Person Re-id
 
-This project aims at learning generic person re-identification (re-id) deep features from multiple datasets with domain guided dropout. Mainly based on our CVPR 2016 paper [Learning Deep Feature Representations with Domain Guided Dropout for Person Re-identification](Learning Deep Feature Representations with Domain Guided Dropout for Person Re-identification).
+This project aims at learning generic person re-identification (re-id) deep features from multiple datasets with domain guided dropout. Mainly based on our CVPR 2016 paper [Learning Deep Feature Representations with Domain Guided Dropout for Person Re-identification](http://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Xiao_Learning_Deep_Feature_CVPR_2016_paper.pdf).
 
 ## Installation
 
