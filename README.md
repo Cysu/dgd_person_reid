@@ -30,7 +30,7 @@ Download the following datasets.
 1.  [CUHK03](https://docs.google.com/spreadsheet/viewform?usp=drive_web&formkey=dHRkMkFVSUFvbTJIRkRDLWRwZWpONnc6MA#gid=0)
 2.  [CUHK01](https://docs.google.com/spreadsheet/viewform?formkey=dF9pZ1BFZkNiMG1oZUdtTjZPalR0MGc6MA)
 3.  [PRID](https://lrs.icg.tugraz.at/datasets/prid/prid_2011.zip)
-4.  [VIPeR](http://soe.ucsc.edu/~manduchi/VIPeR.v1.0.zip)
+4.  [VIPeR](https://drive.google.com/open?id=0B67_d0rLRTQYdlcwd3VGV09SVHM) (I cannot find the link to the original dataset. This is my previous backup version.)
 5.  [3DPeS](http://imagelab.ing.unimore.it/3DPeS/3dPES_data/3DPeS_ReId_Snap.zip)
 6.  [i-LIDS](https://drive.google.com/file/d/0B67_d0rLRTQYRjQ2T3o1NmxvVE0/view?usp=sharing) (I cannot find the link to the original dataset. This is my previous backup version.)
 7.  [Shinpuhkan](http://www.mm.media.kyoto-u.ac.jp/en/datasets/shinpuhkan) (need to send an email to the authors)
