@@ -1,12 +1,8 @@
+from __future__ import absolute_import
 import numpy as np
 from argparse import ArgumentParser
 
-# Add the dgd_root_path to Python environment to "import utils"
-import sys,os
-dgd_root_path = os.path.abspath('.')
-sys.path.insert(0,dgd_root_path)
-
-from utils import *
+from .utils import *    # actually it's quite bad to do so, will refactor it later
 
 
 def main(args):

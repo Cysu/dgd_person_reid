@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import sys
 import os
 import os.path as osp
@@ -5,12 +6,7 @@ import numpy as np
 import google.protobuf as pb
 from argparse import ArgumentParser
 
-# Add the dgd_root_path to Python environment to "import utils"
-import sys,os
-dgd_root_path = os.path.abspath('.')
-sys.path.insert(0,dgd_root_path)
-
-from utils import *
+from .utils import *    # actually it's quite bad to do so, will refactor it later
 
 
 if 'external/caffe/python' not in sys.path:

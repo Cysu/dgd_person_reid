@@ -1,14 +1,10 @@
+from __future__ import absolute_import
 import numpy as np
 from argparse import ArgumentParser
 from sklearn.decomposition import PCA
 from sklearn.metrics.pairwise import pairwise_distances
 
-# Add the dgd_root_path to Python environment to "import utils"
-import sys,os
-dgd_root_path = os.path.abspath('.')
-sys.path.insert(0,dgd_root_path)
-from utils import *
-
+from .utils import *    # actually it's quite bad to do so, will refactor it later
 
 def _get_train_data(result_dir):
     # Merge training and validation features and labels
