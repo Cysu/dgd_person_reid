@@ -3,7 +3,8 @@ from argparse import ArgumentParser
 from sklearn.decomposition import PCA
 from sklearn.metrics.pairwise import pairwise_distances
 
-from utils import *
+from __future__ import absolute_import
+from .utils import *
 
 
 def _get_train_data(result_dir):

@@ -5,12 +5,8 @@ from glob import glob
 from scipy.misc import imsave
 from collections import defaultdict
 
-# Add the dgd_root_path to Python environment to "import utils"
-import sys,os
-dgd_root_path = os.path.abspath('.')
-sys.path.insert(0,dgd_root_path)
-
-from utils import *
+from __future__ import absolute_import
+from .utils import *
 
 
 def main(args):
