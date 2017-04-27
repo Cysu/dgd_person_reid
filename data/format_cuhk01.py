@@ -1,9 +1,10 @@
+from __future__ import absolute_import
 import shutil
 import numpy as np
 from argparse import ArgumentParser
 from scipy.misc import imsave
 
-from utils import *
+from .utils import *    # actually it's quite bad to do so, will refactor it later
 
 
 def main(args):
