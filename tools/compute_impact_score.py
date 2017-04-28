@@ -4,7 +4,7 @@ import os.path as osp
 from argparse import ArgumentParser
 
 import numpy as np
-import google.protobuf as pb
+from google.protobuf import text_format
 
 root = osp.join(osp.dirname(osp.abspath(__file__)), '..')
 if osp.join(root, 'external/caffe/python') not in sys.path:
@@ -16,7 +16,7 @@ from caffe.proto.caffe_pb2 import NetParameter
 def parse_prototxt(model_file, layer_name):
     with open(model_file) as fp:
         net = NetParameter()
-        pb.text_format.Parse(fp.read(), net)
+        text_format.Parse(fp.read(), net)
     for i, layer in enumerate(net.layer):
         if layer.name != layer_name: continue
         blob = layer.top[0]
