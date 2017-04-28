@@ -1,13 +1,13 @@
-from __future__ import absolute_import
 import sys
-import lmdb
-import numpy as np
+import os.path as osp
 from argparse import ArgumentParser
 
-from .utils import *    # actually it's quite bad to do so, will refactor it later
+import lmdb
+import numpy as np
 
-if 'external/caffe/python' not in sys.path:
-    sys.path.insert(0, 'external/caffe/python')
+root = osp.join(osp.dirname(osp.abspath(__file__)), '..')
+if osp.join(root, 'external/caffe/python') not in sys.path:
+    sys.path.insert(0, osp.join(root, 'external/caffe/python'))
 from caffe.proto.caffe_pb2 import Datum
 
 

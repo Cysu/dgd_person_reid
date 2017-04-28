@@ -1,10 +1,16 @@
-from __future__ import absolute_import
-import numpy as np
+import sys
+import os.path as osp
 from argparse import ArgumentParser
+
+import numpy as np
 from sklearn.decomposition import PCA
 from sklearn.metrics.pairwise import pairwise_distances
 
-from .utils import *    # actually it's quite bad to do so, will refactor it later
+root = osp.join(osp.dirname(osp.abspath(__file__)), '..')
+if root not in sys.path:
+    sys.path.insert(0, root)
+from utils import cmc
+
 
 def _get_train_data(result_dir):
     # Merge training and validation features and labels

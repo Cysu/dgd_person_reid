@@ -1,12 +1,17 @@
-from __future__ import absolute_import
+import sys
+import os.path as osp
 import shutil
-import numpy as np
 from argparse import ArgumentParser
-from glob import glob
-from scipy.misc import imsave
 from collections import defaultdict
+from glob import glob
 
-from .utils import *    # actually it's quite bad to do so, will refactor it later
+import numpy as np
+from scipy.misc import imsave
+
+root = osp.join(osp.dirname(osp.abspath(__file__)), '..')
+if root not in sys.path:
+    sys.path.insert(0, root)
+from utils import mkdir_if_missing, write_json
 
 
 def main(args):

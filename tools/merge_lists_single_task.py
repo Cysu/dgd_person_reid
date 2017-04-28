@@ -1,8 +1,13 @@
-from __future__ import absolute_import
-import numpy as np
+import sys
+import os.path as osp
 from argparse import ArgumentParser
 
-from .utils import *    # actually it's quite bad to do so, will refactor it later
+import numpy as np
+
+root = osp.join(osp.dirname(osp.abspath(__file__)), '..')
+if root not in sys.path:
+    sys.path.insert(0, root)
+from utils import mkdir_if_missing, write_list, read_kv
 
 
 def main(args):
