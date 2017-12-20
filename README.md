@@ -65,6 +65,11 @@ Link the root directory of these datasets to our project.
 
 **Note: We use two GPUs to train the models by default. Change the `mpirun -n 2 ... -gpu 0,1` in `scripts/routines.sh` to your own hardware configuration if necessary.**
 
+**GPU device id needs to be changed in:
+
+1. train_model() and extract_features() of scripts/rountines.sh
+2. main() of tools/compute_impact_score.py**
+
 Our experiments are organized into two groups:
 
 1.  Baseline: training individually on each dataset
